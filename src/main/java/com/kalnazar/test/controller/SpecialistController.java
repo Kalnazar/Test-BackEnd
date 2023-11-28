@@ -1,12 +1,11 @@
 package com.kalnazar.test.controller;
 
+import com.kalnazar.test.exception.UserNotFoundException;
 import com.kalnazar.test.model.Specialist;
 import com.kalnazar.test.model.dto.LoginDTO;
 import com.kalnazar.test.service.SpecialistService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,27 +15,30 @@ import java.util.List;
 @RequestMapping("api/specialist/")
 public class SpecialistController {
     private final SpecialistService specialistService;
-    @Autowired
-    private final PasswordEncoder passwordEncoder;
 
-    public SpecialistController(SpecialistService specialistService, PasswordEncoder passwordEncoder) {
+    public SpecialistController(SpecialistService specialistService) {
         this.specialistService = specialistService;
-        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping(path = "/login")
     public ResponseEntity<?> loginSpecialist(@RequestBody LoginDTO loginDTO) {
-        Specialist specialist = specialistService.findSpecialistByEmail(loginDTO.getEmail());
-        if (specialist != null && passwordEncoder.matches(loginDTO.getPassword(), specialist.getPassword())) {
-            return ResponseEntity.ok(specialist);
-        } else {
-            return (ResponseEntity<?>) ResponseEntity.internalServerError();
+        try {
+            Specialist specialist = specialistService.findSpecialistByEmail(loginDTO.getEmail());
+            if (specialist != null && specialist.getPassword().equals(loginDTO.getPassword())) {
+                return ResponseEntity.ok(specialist);
+            } else {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
+            }
+        } catch (UserNotFoundException ex) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
+        } catch (Exception ex) {
+            // Log the exception details for debugging
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An internal server error occurred");
         }
     }
 
     @PostMapping(path = "/register")
     public ResponseEntity<Specialist> registerSpecialist(@RequestBody Specialist specialist) {
-        specialist.setPassword(passwordEncoder.encode(specialist.getPassword()));
         Specialist newSpecialist = specialistService.saveSpecialist(specialist);
         return new ResponseEntity<>(newSpecialist, HttpStatus.CREATED);
     }
