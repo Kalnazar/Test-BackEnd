@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("api/specialist/")
@@ -37,6 +39,12 @@ public class SpecialistController {
         specialist.setPassword(passwordEncoder.encode(specialist.getPassword()));
         Specialist newSpecialist = specialistService.saveSpecialist(specialist);
         return new ResponseEntity<>(newSpecialist, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<Specialist>> getAllEmployee() {
+        List<Specialist> specialists = specialistService.findAllSpecialists();
+        return new ResponseEntity<>(specialists, HttpStatus.OK);
     }
 
 }
