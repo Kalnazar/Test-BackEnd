@@ -11,7 +11,9 @@ public class Specialist {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false, updatable = false)
     private int id;
+    @Column(nullable = false)
     private String fullName;
+    @Column(nullable = false)
     private String email;
     private Date dateOfBirth;
     private String location;
