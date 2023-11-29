@@ -49,4 +49,16 @@ public class SpecialistController {
         return new ResponseEntity<>(specialists, HttpStatus.OK);
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<Specialist> updateSpecialist(@RequestBody Specialist specialist) {
+        Specialist updatedSpecialist = specialistService.updateSpecialist(specialist);
+        return new ResponseEntity<>(updatedSpecialist, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteSpecialist(@PathVariable int id) {
+        specialistService.deleteSpecialistById(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
 }
