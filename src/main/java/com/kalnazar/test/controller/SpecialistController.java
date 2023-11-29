@@ -49,6 +49,12 @@ public class SpecialistController {
         return new ResponseEntity<>(specialists, HttpStatus.OK);
     }
 
+    @GetMapping("/find/{email}")
+    public ResponseEntity<Specialist> finSpecialistByEmail(@PathVariable("email") String email) {
+        Specialist specialist = specialistService.findSpecialistByEmail(email);
+        return new ResponseEntity<>(specialist, HttpStatus.OK);
+    }
+
     @PutMapping("/update")
     public ResponseEntity<Specialist> updateSpecialist(@RequestBody Specialist specialist) {
         Specialist updatedSpecialist = specialistService.updateSpecialist(specialist);
