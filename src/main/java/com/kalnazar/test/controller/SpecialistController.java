@@ -61,9 +61,9 @@ public class SpecialistController {
         return new ResponseEntity<>(updatedSpecialist, HttpStatus.CREATED);
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<?> deleteSpecialist(@PathVariable int id) {
-        specialistService.deleteSpecialistById(id);
+    @DeleteMapping("/delete/{email}")
+    public ResponseEntity<?> deleteSpecialistByEmail(@PathVariable("email") String email) {
+        specialistService.deleteSpecialistByEmail(email);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

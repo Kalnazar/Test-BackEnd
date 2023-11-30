@@ -34,8 +34,8 @@ public class SpecialistService {
                 .orElseThrow(() -> new UserNotFoundException("User by email " + email + " was not found!"));
     }
 
-    public void deleteSpecialistById(int id) {
-        specialistRepo.deleteSpecialistById(id);
+    public void deleteSpecialistByEmail(String email) {
+        specialistRepo.deleteSpecialistByEmail(email);
     }
 
 }

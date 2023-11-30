@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface SpecialistRepo extends JpaRepository<Specialist, Integer> {
-    void deleteSpecialistById(int id);
+    void deleteSpecialistByEmail(String email);
     Optional<Specialist> findSpecialistByEmail(String email);
 }
